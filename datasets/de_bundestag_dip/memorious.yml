@@ -10,8 +10,8 @@ summary: |
   ermöglicht einen Überblick über die parlamentarischen Beratungen beider
   Verfassungsorgane.
 resources:
-  - name: entities.ftm.json
-    url: https://data.ftm.store/de_bundestag_dip/entities.ftm.json
+  - name: "*.ftm.json"
+    url: https://data.ftm.store/de_bundestag_dip/entities/
     mime_type: application/json+ftm
 publisher:
   name: Deutscher Bundestag
@@ -26,7 +26,7 @@ pipeline:
     params:
       url: https://search.dip.bundestag.de/api/v1/drucksache?apikey=GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp
       timedelta:
-        days: 2
+        days: 5
     handle:
       pass: fetch
 
