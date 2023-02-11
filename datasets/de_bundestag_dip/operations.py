@@ -36,6 +36,7 @@ def parse(context, data):
         detail_data = parse_drucksache(document)
         detail_data["tag_key"] = make_key("processed", document["id"])
         if context.check_tag(detail_data["tag_key"]):
+            context.log.info("Already seen: `%s`" % detail_data["tag_key"])
             continue
         detail_data["countries"] = ["de"]
         context.emit("download", data={**data, **detail_data, **{"meta": document}})
