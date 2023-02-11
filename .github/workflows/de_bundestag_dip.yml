@@ -30,8 +30,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 6379:6379
+        expose:
+          - 6379
 
     env:
       ARCHIVE_TYPE: s3
@@ -44,7 +44,7 @@ jobs:
       MEMORIOUS_CONFIG_PATH: "."
       MEMORIOUS_HTTP_TIMEOUT: 60
       MEMORIOUS_CONTINUE_ON_ERROR: 1
-      REDIS_URL: redis://localhost:6379/0
+      REDIS_URL: redis://redis:6379/0
       START_DATE: ${{ github.event.inputs.start_date }}
       FULL_RUN: ${{ github.event.inputs.full_run }}
 
