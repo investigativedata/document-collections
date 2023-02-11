@@ -1,4 +1,4 @@
-name: bundestag_dip
+name: de_bundestag_dip
 
 on:
   workflow_dispatch:
