@@ -2,12 +2,13 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from banal import ensure_dict, ensure_list
-from common.zavod import get_zavod, make_document, make_folder
 from furl import furl
 from nomenklatura.entity import CE
 from servicelayer import env
 from servicelayer.cache import make_key
 from zavod import Zavod
+
+from common.zavod import get_zavod, make_document, make_folder
 
 Data = dict[str, Any]
 
@@ -86,7 +87,7 @@ def enrich(context, data):
 
     for item in ensure_list(m.get("autoren_anzeige")):
         proxy = make_person(zavod, item)
-        rel = make_document(zavod, document, proxy, "Autor", data)
+        rel = make_documentation(zavod, document, proxy, "Autor", data)
         zavod.emit(proxy)
         zavod.emit(rel)
 
