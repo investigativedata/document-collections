@@ -21,8 +21,12 @@ stealthy: true
 
 
 pipeline:
-
   init:
+    method: common.memorious:init
+    handle:
+      pass: seed
+
+  seed:
     method: datasets.de_fragdenstaat.operations:init
     params:
       url: https://fragdenstaat.de/api/v1/document

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from common.zavod import get_zavod, make_document
 from dateparser import parse
 from memorious.core import conn
 from memorious.operations.store import directory
@@ -10,10 +11,23 @@ LIMIT = env.to_int("LIMIT")
 TIME_LIMIT = env.to_int("TIME_LIMIT")
 
 
+def init(context, data):
+    zavod = get_zavod(context)
+    zavod.export_metadata("export/index.json")
+    context.emit(data=data)
+
+
 def store(context, data):
     directory(context, data)
-    context.set_tag(data["incremental_key"], True)
+    incremental_key = data.get("incremental_key")
+    if incremental_key is not None:
+        context.set_tag(incremental_key, True)
     conn.incr(make_key(context.crawler, "run", context.run_id, "documents"))
+
+    if context.params.get("make_proxy"):
+        zavod = get_zavod(context)
+        proxy = make_document(zavod, data, context.crawler.config)
+        zavod.emit(proxy)
 
     if TIME_LIMIT:
         start = parse(

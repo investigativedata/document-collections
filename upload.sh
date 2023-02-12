@@ -3,6 +3,9 @@
 # args:
 # 1 dataset name
 
+# index
+aws s3 --endpoint-url https://minio.ninja cp --no-progress data/export/index.json s3://catalog.investigativedata.org/$1/
+
 # memorious db
 aws s3 --endpoint-url https://minio.ninja cp --no-progress data/datastore.sqlite3 s3://catalog.investigativedata.org/$1/
 # entities

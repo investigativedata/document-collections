@@ -25,13 +25,17 @@ def make_document(context: Zavod, data: Data, config: Data) -> CE:
     proxy = context.make("Document")
     proxy.id = data["content_hash"]
     proxy.add("contentHash", data["content_hash"])
+    proxy.add("publisher", config["publisher"]["name"])
+    proxy.add("publisherUrl", config["publisher"]["url"])
     proxy.add("fileSize", data["headers"].get("content-length"))
     proxy.add("mimeType", data["headers"]["content-type"])
     proxy.add("sourceUrl", data["url"])
     proxy.add("modifiedAt", data.get("modified_at"))
     proxy.add("retrievedAt", parse(data["headers"]["date"]))
-    proxy.add("publisher", config["publisher"]["name"])
-    proxy.add("publisherUrl", config["publisher"]["url"])
+    proxy.add("title", data.get("title"))
+    proxy.add("name", data.get("name"))
+    proxy.add("summary", data.get("summary"))
+    proxy.add("publishedAt", parse(data.get("published_at", "")))
     return proxy
 
 

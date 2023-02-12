@@ -22,6 +22,11 @@ stealthy: true
 
 pipeline:
   init:
+    method: common.memorious:init
+    handle:
+      pass: seed
+
+  seed:
     method: datasets.de_bundestag_dip.operations:init
     params:
       url: https://search.dip.bundestag.de/api/v1/drucksache?apikey=GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp
