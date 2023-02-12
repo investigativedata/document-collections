@@ -11,7 +11,7 @@ summary: |
   Verfassungsorgane.
 resources:
   - name: "*.ftm.json"
-    url: https://data.ftm.store/de_bundestag_dip/entities/
+    url: https://catalog.investigativedata.org/de_bundestag_dip/entities/
     mime_type: application/json+ftm
 publisher:
   name: Deutscher Bundestag
