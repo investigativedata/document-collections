@@ -50,8 +50,8 @@ jobs:
       REDIS_URL: redis://redis:6379/0
       START_DATE: ${{ github.event.inputs.start_date }}
       FULL_RUN: ${{ github.event.inputs.full_run }}
-      # LIMIT: ${{ github.event.inputs.limit }}
-      LIMIT: 5000
+      LIMIT: ${{ github.event.inputs.limit }}
+      TIME_LIMIT: 300  # 5h
 
     steps:
       - name: Crawl
