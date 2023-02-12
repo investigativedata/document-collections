@@ -32,15 +32,18 @@ def init(context, data):
 
 def parse(context, data):
     res = context.http.rehash(data)
+    seen = 0
 
     for document in ensure_list(res.json["documents"]):
         detail_data = parse_drucksache(document)
         detail_data["tag_key"] = make_key("processed", document["id"])
         if context.check_tag(detail_data["tag_key"]):
-            context.log.info("Already seen: `%s`" % detail_data["tag_key"])
+            seen += 1
             continue
         detail_data["countries"] = ["de"]
         context.emit("download", data={**data, **detail_data, **{"meta": document}})
+
+    context.log.info("%d documents already seen." % seen)
 
     # next page
     fu = furl(data["url"])
