@@ -20,7 +20,7 @@ publish: data/export/entities.ftm.json data/store/de_fragdenstaat
 	bash ../../upload.sh de_fragdenstaat
 
 process: data/datastore.sqlite3
-	MEMORIOUS_CONFIG_PATH=. memorious run de_fragdenstaat
+	MEMORIOUS_CONFIG_PATH=. memorious run de_fragdenstaat --threads=1
 
 clean:
 	rm -rf data/

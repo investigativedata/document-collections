@@ -12,6 +12,7 @@ TIME_LIMIT = env.to_int("TIME_LIMIT")
 
 def store(context, data):
     directory(context, data)
+    context.set_tag(data["incremental_key"], True)
     conn.incr(make_key(context.crawler, "run", context.run_id, "documents"))
 
     if TIME_LIMIT:

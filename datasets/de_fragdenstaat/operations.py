@@ -1,13 +1,12 @@
 import re
 
-from common.zavod import get_zavod, make_document
 from memorious import settings
 from memorious.helpers import make_id
-from servicelayer import env
 from servicelayer.cache import make_key
 
+from common.zavod import get_zavod, make_document
+
 DEFAULT_URL = "https://fragdenstaat.de/api/v1/document"
-MAX_ID = env.to_int("MAX_ID")
 
 
 def _get(data, *keys):
@@ -116,11 +115,4 @@ def enrich(context, data):
             zavod.emit(body)
             zavod.emit(rel)
 
-    # mark stored document to exclude from next run
-    context.set_tag(data["incremental_key"], True)
     context.emit(data=data)
-
-    if MAX_ID and data["id"] > MAX_ID:
-        context.log.info("Max id (%d) reached." % data["id"])
-        context.crawler.cancel()
-        return

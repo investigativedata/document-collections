@@ -2,12 +2,14 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from banal import ensure_dict, ensure_list
-from common.zavod import get_zavod, make_document, make_folder
 from furl import furl
+from memorious import settings
 from nomenklatura.entity import CE
 from servicelayer import env
 from servicelayer.cache import make_key
 from zavod import Zavod
+
+from common.zavod import get_zavod, make_document, make_folder
 
 Data = dict[str, Any]
 
@@ -34,12 +36,15 @@ def parse(context, data):
     seen = 0
 
     for document in ensure_list(res.json["documents"]):
+        incremental_key = make_key("skip_incremental", document["id"])
+        if settings.INCREMENTAL:
+            if context.check_tag(incremental_key):
+                context.log.debug(f"Skipping: {incremental_key}")
+                seen += 1
+                continue
+
+        data["incremental_key"] = incremental_key
         detail_data = parse_drucksache(document)
-        detail_data["tag_key"] = make_key("processed", document["id"])
-        if context.check_tag(detail_data["tag_key"]):
-            seen += 1
-            continue
-        detail_data["countries"] = ["de"]
         context.emit("download", data={**data, **detail_data, **{"meta": document}})
 
     context.log.info("%d documents already seen." % seen)
@@ -53,9 +58,6 @@ def parse(context, data):
 
 def enrich(context, data):
     m = data["meta"]
-
-    # make document as processed:
-    context.set_tag(data["tag_key"], True)
 
     zavod = get_zavod(context)
     document = make_document(zavod, data, context.crawler.config)
