@@ -1,0 +1,50 @@
+name: ti_knowledge_hub
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max documents limit"
+        type: number
+  schedule:
+    - cron: "0 5 * * 1"
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    container: ghcr.io/investigativedata/memorious-crawlers:main
+    defaults:
+      run:
+        working-directory: /crawlers/datasets/ti_knowledge_hub
+
+    services:
+      redis:
+        image: redis:alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    env:
+      ARCHIVE_TYPE: s3
+      ARCHIVE_BUCKET: memorious
+      ARCHIVE_ENDPOINT_URL: ${{ secrets.ARCHIVE_ENDPOINT_URL }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: eu-central-1
+      AWS_DEFAULT_REGION: eu-central-1
+      MEMORIOUS_CONFIG_PATH: "."
+      MEMORIOUS_HTTP_TIMEOUT: 60
+      MEMORIOUS_CONTINUE_ON_ERROR: 1
+      REDIS_URL: redis://redis:6379/0
+      LIMIT: ${{ github.event.inputs.limit }}
+      TIME_LIMIT: 300  # 5h
+
+    steps:
+      - name: Crawl
+        run: make process
+      - name: Publish
+        run: make publish
