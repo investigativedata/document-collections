@@ -1,4 +1,4 @@
-name: de_bundestag_dip
+name: de_fragdenstaat
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
     container: ghcr.io/investigativedata/memorious-crawlers:main
     defaults:
       run:
-        working-directory: /crawlers/datasets/de_bundestag_dip
+        working-directory: /crawlers/datasets/de_fragdenstaat
 
     services:
       redis:

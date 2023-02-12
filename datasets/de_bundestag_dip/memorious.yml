@@ -1,6 +1,6 @@
 name: de_bundestag_dip
 title: Dokumentations- und Informationssystem für Parlamentsmaterialien (DIP)
-prefix: de_dip
+prefix: de-dip
 country: de
 summary: |
   Das Dokumentations- und Informationssystem für Parlamentsmaterialien (DIP)
@@ -52,4 +52,4 @@ pipeline:
       pass: store
 
   store:
-    method: directory
+    method: common.memorious:store

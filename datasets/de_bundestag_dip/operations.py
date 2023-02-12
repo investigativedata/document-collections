@@ -2,20 +2,19 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from banal import ensure_dict, ensure_list
+from common.zavod import get_zavod, make_document, make_folder
 from furl import furl
 from nomenklatura.entity import CE
 from servicelayer import env
 from servicelayer.cache import make_key
 from zavod import Zavod
 
-from common.zavod import get_zavod, make_document, make_folder
-
 Data = dict[str, Any]
 
 
 def init(context, data):
     f = furl(context.params["url"])
-    if not env.to_bool("FULL_RUN"):
+    if not env.to_bool("FULL_RUN") and not env.to_int("LIMIT"):
         start_date = (
             env.get("START_DATE")
             or (  # noqa

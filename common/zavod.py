@@ -21,13 +21,14 @@ def get_zavod(context: Context) -> Zavod:
 
 def make_document(context: Zavod, data: Data, config: Data) -> CE:
     # data: memorious data
+    data["headers"] = {k.lower(): v for k, v in data["headers"].items()}
     proxy = context.make("Document")
     proxy.id = data["content_hash"]
     proxy.add("contentHash", data["content_hash"])
-    proxy.add("fileSize", data["headers"]["content-length"])
+    proxy.add("fileSize", data["headers"].get("content-length"))
     proxy.add("mimeType", data["headers"]["content-type"])
     proxy.add("sourceUrl", data["url"])
-    proxy.add("modifiedAt", data["modified_at"])
+    proxy.add("modifiedAt", data.get("modified_at"))
     proxy.add("retrievedAt", parse(data["headers"]["date"]))
     proxy.add("publisher", config["publisher"]["name"])
     proxy.add("publisherUrl", config["publisher"]["url"])

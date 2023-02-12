@@ -1,0 +1,43 @@
+name: de_fragdenstaat
+title: FragDenStaat – Dokumente (u.a. Antworten auf IFG-Anfragen)
+prefix: de-fds
+country: de
+summary: |
+  All documents accesible via the FragDenStaat api. This includes mostly
+  answers to freedom of information requests, but as well other documents the
+  platform publishes.
+resources:
+  - name: "*.ftm.json"
+    url: https://catalog.investigativedata.org/de_fragdenstaat/entities/
+    mime_type: application/json+ftm
+publisher:
+  name: FragDenStaat
+  description: |
+    FragDenStaat is the central contact for all questions relating to freedom
+    of information in Germany.
+  url: https://fragdenstaat.de
+
+stealthy: true
+
+
+pipeline:
+
+  init:
+    method: datasets.de_fragdenstaat.operations:init
+    params:
+      url: https://fragdenstaat.de/api/v1/document
+    handle:
+      pass: fetch
+
+  fetch:
+    method: fetch
+    handle:
+      pass: enrich
+
+  enrich:
+    method: datasets.de_fragdenstaat.operations:enrich
+    handle:
+      pass: store
+
+  store:
+    method: common.memorious:store
