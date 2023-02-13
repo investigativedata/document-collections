@@ -15,7 +15,7 @@ on:
         description: "Max documents limit"
         type: number
   schedule:
-    - cron: "0 5 * * *"
+    - cron: "0 0 * * *"
 
 jobs:
   crawl:
